@@ -1,0 +1,14 @@
+name = "Plane Turbulence"
+prefix = "Plane_Turbulence"
+author = "Seb"
+template = "cba"
+mainprefix = "z"
+include = ["./include"]
+files = [
+    "mod.cpp",
+    "logo.paa",
+    "logoSmall.paa",
+    "logoOver.paa"
+] 
+folder_optionals = true
+sig_version = 3

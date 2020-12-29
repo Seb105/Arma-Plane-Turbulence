@@ -1,13 +1,10 @@
 /*
  * Author: Seb
  * Should not be called by itself. See Plane_Turbulence_fnc_turbulence instead.
-
- * Example:
- * vehicle call Plane_Turbulence_fnc_turbulence;
  *
- * Public: No
+ * Public: Yes
  */
-params ["_vehicle", "_dimensions", "_surfaceArea"];
+params ["_vehicle", "_dimensions", "_surfaceArea", "_maxSpeed"];
 _vehicle setVariable ["PLANE_TURBULENCE_READY", false];
 // if weather effect is enabled in settings, easeIn to windiness value so that lower windiness/gustiness values have less of an effect.
 private _windiness = [0, [0, 1, (windStr+overcast)/2] call BIS_fnc_easeIn] select PLANE_TURBULENCE_ENABLE_WEATHEREFFECT;
@@ -26,6 +23,12 @@ private _gustLength = [_minGustLength, _maxGustLength, random(1)] call BIS_fnc_e
 private _gustPressure = (0.5*1.2*(_gustSpeed*_gustSpeed))/2;
 // The gust force scalar is the force applied per second per unit surface area, divided by timestep.
 private _gustForceScalar = _gustPressure * 0.05 * _surfaceArea;
+// SpeedCoef makes aircraft MORE stable at higher speeds.
+private _speed = ((velocity _vehicle) call CBA_fnc_vect2Polar)#0;
+if (_speed > 25) then {
+    private _speedCoef = [0.2, 1, ([1-((_speed-25)/(_maxSpeed-25)), 0, 1] call BIS_fnc_clamp)] call BIS_fnc_lerp;
+    _gustForceScalar = _gustForceScalar * _speedCoef;
+}; 
 // selects a point on the hull for force the force to be applied.
 private _turbulenceCentre  = _dimensions apply {(random(_x)-(_x/2))};
 // force direction. Pick random direction use gustforcescalar as magnitude.
@@ -47,7 +50,7 @@ if (!isGamePaused && isEngineOn _vehicle) then {
                 (_vehicle vectorModelToWorld _forceN),
                 _turbulenceCentreN
             ];
-        },  [_vehicle, _force, _turbulenceCentre, _i, _gustLength, _oldForce, _oldCentre], _i] call CBA_fnc_waitAndExecute;
+        }, [_vehicle, _force, _turbulenceCentre, _i, _gustLength, _oldForce, _oldCentre], _i] call CBA_fnc_waitAndExecute;
     };
 };
 // set old forces for next interpolation loop

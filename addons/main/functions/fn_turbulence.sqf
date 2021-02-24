@@ -44,7 +44,7 @@ private _surfaceArea = (2*pi*(_maxHeight/2)*_maxLength + 2*pi*(_maxHeight/2)^2)/
 	// if player is no longer in vehicle, remove per frame event handler and undeclare variables
 	if (vehicle _currentUnit == _vehicle) then {
 		// if player is the Pilot and  game is not paused and Rotorlib Advanced Flight Model is NOT enabled and vehicle engine is on, cause turbulence.
-		if (driver _vehicle == _currentUnit && _vehicle getVariable "PLANE_TURBULENCE_READY") then {
+		if (currentPilot _vehicle == _currentUnit && _vehicle getVariable "PLANE_TURBULENCE_READY") then {
 			[_vehicle, _dimensions, _surfaceArea, _maxSpeed] call Plane_Turbulence_fnc_turbLogic;
 		};
 	} else {

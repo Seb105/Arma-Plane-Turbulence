@@ -22,7 +22,7 @@ ADDON = false;
 	"SLIDER",
 	["Minimum Turbulence","Set the minimum turbulence during calm weather. This number is also ADDED to the maximum turbulence"],
 	["Aircraft Turbulence","Plane Turbulence"],
-	[0,10,3,1],
+	[0,10,2,1],
 	0
 ] call CBA_fnc_addSetting;
 [
@@ -30,7 +30,7 @@ ADDON = false;
 	"SLIDER",
 	["Maximum Turbulence","Set the max turbulence during the most severe weather. The minimum turbulence value is also ADDED to this number."],
 	["Aircraft Turbulence","Plane Turbulence"],
-	[0,40,15,1],
+	[0,30,9,1],
 	0
 ] call CBA_fnc_addSetting;
 ADDON = true;
